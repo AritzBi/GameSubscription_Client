@@ -51,7 +51,7 @@ public class GameGUI extends JFrame implements Observer {
 
 	public GameGUI(GameController gameController) {
 		super();
-		modeloDeDatos = new Object[10][5];
+		modeloDeDatos = new Object[3][5];
 		rellenarModeloDeDatosDePrueba();
 		controller = gameController;
 		controller.addObserver(this);
