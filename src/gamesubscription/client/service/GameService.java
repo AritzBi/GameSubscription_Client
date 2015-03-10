@@ -1,9 +1,18 @@
 package gamesubscription.client.service;
 
+import gamesubscription.client.pojo.GamePOJO;
+import gamesubscription.client.pojo.Games;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observer;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 import org.apache.axis2.AxisFault;
 import org.apache.ws.axis2.GameServiceStub;
@@ -55,15 +64,24 @@ public class GameService {
 		return returnedValue;
 	}
 
-	public static void main(String[] args) {
-		Game game = new Game();
-		game.setAge(10);
-		game.setDescription("Pruebita");
-		game.setId(1234);
-		game.setName("Call of Duty");
-		game.setType("Action");
-
-		GameService gameService = new GameService();
-		System.out.println(gameService.insertGame(game));
+	public List<GamePOJO> processXMLFile(String path) {
+		List<GamePOJO> listaGames = new ArrayList<GamePOJO>();
+		
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Games.class);
+			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+			
+			Games games = (Games) unmarshaller.unmarshal(new FileInputStream(
+					path));
+			if (games != null) {
+				listaGames = games.getGames();
+			}
+		} catch (FileNotFoundException e) {
+			System.err.println("#FileNotFoundException " + e.getMessage());
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+		return listaGames;
 	}
+
 }

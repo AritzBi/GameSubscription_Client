@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<games>
+	<game>
+		<name>Anytown</name>
+		<age>16</age>
+		<type>Action</type>
+		<description>Esto es una descripcion</description>
+	</game>
+</games>

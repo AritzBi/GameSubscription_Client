@@ -1,11 +1,12 @@
 package gamesubscription.client.gui;
 
 import gamesubscription.client.controller.GameController;
-import gamesubscription.client.service.GameService;
+import gamesubscription.client.pojo.GamePOJO;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -16,11 +17,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 import org.apache.ws.axis2.xsd.Game;
 
@@ -30,41 +29,40 @@ public class GameGUI extends JFrame implements Observer {
 
 	private JButton botonCargar;
 	private JButton botonCerrar;
-	private JButton botonEditar;
+	private JButton botonEnviar;
 	private JTable tablaTerminales;
 	private JScrollPane jScrollPane1;
 	private JPanel jPanel2;
 	private GameController controller;
-	private Object[][] modeloDeDatos;
+	private Object[][] rows;
+	private DefaultTableModel model;
 
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				GameService gameService = new GameService();
-				GameController gameController = new GameController(gameService);
-				GameGUI inst = new GameGUI(gameController);
-				inst.setLocationRelativeTo(null);
-				inst.setVisible(true);
-			}
-		});
-	}
+	private static int POSITION_ID = 0;
+	private static int POSITION_NAME = 1;
+	private static int POSITION_AGE = 2;
+	private static int POSITION_TYPE = 3;
+	private static int POSITION_DESCRIPTION = 4;
+
+	private static String TEST_NAME_GAME = "Call of Duty";
+	private static String TEST_MINIMUM_AGE_GAME = "16";
+	private static String TEST_TYPE_GAME = "Action";
+	private static String TEST_DESCRIPTION_GAME = "Esto es una prueba de descripción del juego";
 
 	public GameGUI(GameController gameController) {
 		super();
-		modeloDeDatos = new Object[3][5];
-		rellenarModeloDeDatosDePrueba();
+		rows = new Object[2][5];
+		rellenarrowsDePrueba();
 		controller = gameController;
 		controller.addObserver(this);
 		initGUI();
 	}
 
-	private void rellenarModeloDeDatosDePrueba() {
-		for (int i = 0; i < 3; i++) {
-			modeloDeDatos[i][0] = "1234";
-			modeloDeDatos[i][1] = "Call of Duty";
-			modeloDeDatos[i][2] = "16";
-			modeloDeDatos[i][3] = "Accion";
-			modeloDeDatos[i][4] = "Esto es una prueba de descripción del juego";
+	private void rellenarrowsDePrueba() {
+		for (int i = 0; i < 2; i++) {
+			rows[i][1] = TEST_NAME_GAME;
+			rows[i][2] = TEST_MINIMUM_AGE_GAME;
+			rows[i][3] = TEST_TYPE_GAME;
+			rows[i][4] = TEST_DESCRIPTION_GAME;
 		}
 
 	}
@@ -92,22 +90,22 @@ public class GameGUI extends JFrame implements Observer {
 					jPanel2.add(jScrollPane1);
 					jScrollPane1.setBounds(12, 24, 600, 152);
 					{
-						TableModel jTable1Model = new DefaultTableModel(
-								modeloDeDatos, new String[] { "Id", "Name",
-										"Age", "Type", "Description" });
+						model = new DefaultTableModel(rows, new String[] {
+								"Id", "Name", "Age", "Type", "Description" });
+
 						tablaTerminales = new JTable();
 						jScrollPane1.setViewportView(tablaTerminales);
-						tablaTerminales.setModel(jTable1Model);
+						tablaTerminales.setModel(model);
 						tablaTerminales.getColumnModel().getColumn(4)
 								.setPreferredWidth(400);
 					}
 				}
 				{
-					botonEditar = new JButton();
-					jPanel2.add(botonEditar);
-					botonEditar.setText("Enviar");
-					botonEditar.setBounds(320, 182, 76, 23);
-					botonEditar.addActionListener(new ActionListener() {
+					botonEnviar = new JButton();
+					jPanel2.add(botonEnviar);
+					botonEnviar.setText("Enviar");
+					botonEnviar.setBounds(320, 182, 76, 23);
+					botonEnviar.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent evt) {
 							botonEnviar();
 						}
@@ -146,13 +144,8 @@ public class GameGUI extends JFrame implements Observer {
 			pack();
 			this.setSize(660, 320);
 		} catch (Exception e) {
-			// add your error handling code here
 			e.printStackTrace();
 		}
-	}
-
-	private void botonEditar() {
-
 	}
 
 	private void botonCargar() {
@@ -160,27 +153,30 @@ public class GameGUI extends JFrame implements Observer {
 		int returnVal = jfc.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File fichero = jfc.getSelectedFile();
-			System.out.println(fichero.getAbsolutePath());
+			List<GamePOJO> games = controller.processXMLFile(fichero.getAbsolutePath());
+			System.out.println( games.get(0) );
 		}
 	}
 
 	private void botonEnviar() {
-
 		Game game;
-		for (int i = 0; i < modeloDeDatos.length; i++)
-		{
+		for (int i = 0; i < rows.length; i++) {
 			game = new Game();
-			game.setName((String) modeloDeDatos[i][1]);
-			game.setAge( new Integer( (String) modeloDeDatos[i][2] ) );
-			game.setType((String) modeloDeDatos[i][3]);
-			game.setDescription((String) modeloDeDatos[i][4]);
+			game.setName((String) rows[i][POSITION_NAME]);
+			game.setAge(new Integer((String) rows[i][POSITION_AGE]));
+			game.setType((String) rows[i][POSITION_TYPE]);
+			game.setDescription((String) rows[i][POSITION_DESCRIPTION]);
 			long idGame = controller.insertGame(game);
-			if (idGame != -1) 
-			{
-				modeloDeDatos[i][0] = idGame;
-				System.out.println("Resultado" + idGame);
+			if (idGame != -1) {
+				rows[i][POSITION_ID] = idGame;
+				System.out.println("Resultado " + idGame);
 			}
 		}
+		model.setRowCount(0);
+		for (int i = 0; i < rows.length; i++) {
+			model.addRow(rows[i]);
+		}
+		model.fireTableDataChanged();
 	}
 
 	private void botonCerrar() {
@@ -189,7 +185,5 @@ public class GameGUI extends JFrame implements Observer {
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
-
 	}
 }
