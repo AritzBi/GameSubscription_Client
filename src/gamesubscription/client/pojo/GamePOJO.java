@@ -38,7 +38,7 @@ public class GamePOJO {
 	}
 	public String toString ()
 	{
-		return name + " " + age + " " + type + " " + description;
+		return "Name: " + name + " Age: " + age + " Type: " + type + " Description: " + description;
 	}
 	
 }

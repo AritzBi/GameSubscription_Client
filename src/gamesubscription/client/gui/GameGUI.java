@@ -153,8 +153,11 @@ public class GameGUI extends JFrame implements Observer {
 		int returnVal = jfc.showOpenDialog(this);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File fichero = jfc.getSelectedFile();
-			List<GamePOJO> games = controller.processXMLFile(fichero.getAbsolutePath());
-			System.out.println( games.get(0) );
+			List<GamePOJO> games = controller.processXMLFile(fichero
+					.getAbsolutePath());
+			for (GamePOJO gamePOJO : games) {
+				System.out.println(gamePOJO);
+			}
 		}
 	}
 

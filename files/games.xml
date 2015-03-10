@@ -6,4 +6,10 @@
 		<type>Action</type>
 		<description>Esto es una descripcion</description>
 	</game>
+	<game>
+		<name>Anytown 2</name>
+		<age>18</age>
+		<type>Action</type>
+		<description>Esto es una descripcion 2</description>
+	</game>
 </games>
