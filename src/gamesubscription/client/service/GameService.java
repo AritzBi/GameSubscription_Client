@@ -37,8 +37,8 @@ public class GameService {
 		}
 	}
 
-	public Long insertGame(Game game) {
-		Long returnedValue = null;
+	public long insertGame(Game game) {
+		long returnedValue = -1;
 		try {
 			GameServiceStub stub = new GameServiceStub(
 					"http://52.16.130.245:8080/axis2/services/GameService");

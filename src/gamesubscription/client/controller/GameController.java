@@ -22,7 +22,7 @@ public class GameController {
 		service.deleteObserver(o);
 	}
 	
-	public Long insertGame(Game game) {
+	public long insertGame(Game game) {
 		return service.insertGame(game);
 	}
 }

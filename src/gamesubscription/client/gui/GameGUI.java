@@ -167,14 +167,16 @@ public class GameGUI extends JFrame implements Observer {
 	private void botonEnviar() {
 
 		Game game;
-		for (int i = 0; i < modeloDeDatos.length; i++) {
+		for (int i = 0; i < modeloDeDatos.length; i++)
+		{
 			game = new Game();
 			game.setName((String) modeloDeDatos[i][1]);
 			game.setAge( new Integer( (String) modeloDeDatos[i][2] ) );
 			game.setType((String) modeloDeDatos[i][3]);
 			game.setDescription((String) modeloDeDatos[i][4]);
-			Long idGame = controller.insertGame(game);
-			if (idGame != null) {
+			long idGame = controller.insertGame(game);
+			if (idGame != -1) 
+			{
 				modeloDeDatos[i][0] = idGame;
 				System.out.println("Resultado" + idGame);
 			}
