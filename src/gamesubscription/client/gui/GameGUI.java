@@ -174,9 +174,9 @@ public class GameGUI extends JFrame implements Observer {
 	private void botonEnviar() {
 
 		if (volcadoDeTabla()) {
-			JOptionPane.showMessageDialog(this, "Data loaded succesfully.");
+			JOptionPane.showMessageDialog(this, "Data loaded succesfully.", "Info", JOptionPane.INFORMATION_MESSAGE );
 		} else {
-			JOptionPane.showMessageDialog(this, "Failed loading data...");
+			JOptionPane.showMessageDialog(this, "Failed loading data...", "Alert", JOptionPane.WARNING_MESSAGE );
 		}
 		refrescarTabla();
 	}
