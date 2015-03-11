@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <games>
 	<game>
-		<name>Anytown</name>
-		<age>16</age>
-		<type>Action</type>
-		<description>Esto es una descripcion</description>
-	</game>
-	<game>
-		<name>Anytown 2</name>
+		<name>Call of Duty</name>
 		<age>18</age>
 		<type>Action</type>
-		<description>Esto es una descripcion 2</description>
+		<description>Action game</description>
+	</game>
+	<game>
+		<name>Sim City</name>
+		<age>6</age>
+		<type>Action</type>
+		<description>City simulation game</description>
+	</game>
+	<game>
+		<name>World of Warcraft</name>
+		<age>18</age>
+		<type>MORPG</type>
+		<description>Fantasy game</description>
 	</game>
 </games>

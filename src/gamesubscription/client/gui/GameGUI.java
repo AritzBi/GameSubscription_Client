@@ -14,6 +14,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -43,28 +44,43 @@ public class GameGUI extends JFrame implements Observer {
 	private static int POSITION_TYPE = 3;
 	private static int POSITION_DESCRIPTION = 4;
 
-	private static String TEST_NAME_GAME = "Call of Duty";
-	private static String TEST_MINIMUM_AGE_GAME = "16";
-	private static String TEST_TYPE_GAME = "Action";
-	private static String TEST_DESCRIPTION_GAME = "Esto es una prueba de descripción del juego";
-
 	public GameGUI(GameController gameController) {
 		super();
-		rows = new Object[2][5];
-		rellenarrowsDePrueba();
+		rows = new Object[5][5];
 		controller = gameController;
 		controller.addObserver(this);
 		initGUI();
 	}
 
-	private void rellenarrowsDePrueba() {
-		for (int i = 0; i < 2; i++) {
-			rows[i][1] = TEST_NAME_GAME;
-			rows[i][2] = TEST_MINIMUM_AGE_GAME;
-			rows[i][3] = TEST_TYPE_GAME;
-			rows[i][4] = TEST_DESCRIPTION_GAME;
+	private void rellenarTablaConGamesPOJO(List<GamePOJO> games) {
+		int i = 0;
+		rows = new Object[games.size()][5];
+		for (GamePOJO gamePOJO : games) {
+			rows[i][POSITION_NAME] = gamePOJO.getName();
+			rows[i][POSITION_AGE] = gamePOJO.getAge();
+			rows[i][POSITION_TYPE] = gamePOJO.getType();
+			rows[i][POSITION_DESCRIPTION] = gamePOJO.getDescription();
+			i++;
 		}
+	}
 
+	private boolean volcadoDeTabla() {
+		boolean resultado = true;
+
+		Game game;
+		for (int i = 0; i < rows.length; i++) {
+			game = new Game();
+			game.setName((String) rows[i][POSITION_NAME]);
+			game.setAge((int) rows[i][POSITION_AGE]);
+			game.setType((String) rows[i][POSITION_TYPE]);
+			game.setDescription((String) rows[i][POSITION_DESCRIPTION]);
+			long idGame = controller.insertGame(game);
+			if (idGame != -1)
+				rows[i][POSITION_ID] = idGame;
+			else
+				resultado = false;
+		}
+		return resultado;
 	}
 
 	private void initGUI() {
@@ -103,7 +119,7 @@ public class GameGUI extends JFrame implements Observer {
 				{
 					botonEnviar = new JButton();
 					jPanel2.add(botonEnviar);
-					botonEnviar.setText("Enviar");
+					botonEnviar.setText("Send");
 					botonEnviar.setBounds(320, 182, 76, 23);
 					botonEnviar.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent evt) {
@@ -118,9 +134,6 @@ public class GameGUI extends JFrame implements Observer {
 					botonCargar.setBounds(150, 182, 165, 23);
 					botonCargar.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent evt) {
-							System.out
-									.println("botonCargar.actionPerformed, event="
-											+ evt);
 							botonCargar();
 						}
 					});
@@ -129,14 +142,10 @@ public class GameGUI extends JFrame implements Observer {
 			{
 				botonCerrar = new JButton();
 				getContentPane().add(botonCerrar);
-				botonCerrar.setText("Cerrar");
+				botonCerrar.setText("Close");
 				botonCerrar.setBounds(250, 250, 79, 23);
 				botonCerrar.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent evt) {
-						System.out
-								.println("botonCerrar.actionPerformed, event="
-										+ evt);
-						// TODO add your code for botonCerrar.actionPerformed
 						botonCerrar();
 					}
 				});
@@ -155,26 +164,24 @@ public class GameGUI extends JFrame implements Observer {
 			File fichero = jfc.getSelectedFile();
 			List<GamePOJO> games = controller.processXMLFile(fichero
 					.getAbsolutePath());
-			for (GamePOJO gamePOJO : games) {
-				System.out.println(gamePOJO);
+			if (games != null && games.size() > 0) {
+				rellenarTablaConGamesPOJO(games);
+				refrescarTabla();
 			}
 		}
 	}
 
 	private void botonEnviar() {
-		Game game;
-		for (int i = 0; i < rows.length; i++) {
-			game = new Game();
-			game.setName((String) rows[i][POSITION_NAME]);
-			game.setAge(new Integer((String) rows[i][POSITION_AGE]));
-			game.setType((String) rows[i][POSITION_TYPE]);
-			game.setDescription((String) rows[i][POSITION_DESCRIPTION]);
-			long idGame = controller.insertGame(game);
-			if (idGame != -1) {
-				rows[i][POSITION_ID] = idGame;
-				System.out.println("Resultado " + idGame);
-			}
+
+		if (volcadoDeTabla()) {
+			JOptionPane.showMessageDialog(this, "Data loaded succesfully.");
+		} else {
+			JOptionPane.showMessageDialog(this, "Failed loading data...");
 		}
+		refrescarTabla();
+	}
+
+	private void refrescarTabla() {
 		model.setRowCount(0);
 		for (int i = 0; i < rows.length; i++) {
 			model.addRow(rows[i]);
