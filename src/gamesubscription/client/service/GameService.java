@@ -1,5 +1,6 @@
 package gamesubscription.client.service;
 
+import gamesubscription.client.pojo.ClientJersey;
 import gamesubscription.client.pojo.GamePOJO;
 import gamesubscription.client.pojo.Games;
 
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observer;
 
+import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -62,6 +64,35 @@ public class GameService {
 					+ e.getMessage());
 		}
 		return returnedValue;
+	}
+	
+	public List<GamePOJO> findAll() {
+		List<GamePOJO> ltaGames = new ArrayList<GamePOJO>();
+		
+		ClientJersey clientJersey = ClientJersey.getInstance();
+		Games games = clientJersey.getService().path("games").accept(MediaType.APPLICATION_XML).get(Games.class);
+		
+		if ( games != null )
+		{
+			ltaGames = games.getGames();
+		}
+		return ltaGames;
+	}
+	
+	public GamePOJO findById ( Long id )
+	{
+		GamePOJO gamePOJO = null;
+		
+		ClientJersey clientJersey = ClientJersey.getInstance();
+		
+		if ( id != null )
+		{
+			String idstring = String.valueOf(id);
+			gamePOJO = clientJersey.getService().path("games").path(idstring).accept(MediaType.APPLICATION_XML).get(GamePOJO.class);
+		}
+		
+		return gamePOJO;
+		
 	}
 
 	public List<GamePOJO> processXMLFile(String path) {

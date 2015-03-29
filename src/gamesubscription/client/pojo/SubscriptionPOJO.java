@@ -4,21 +4,19 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "game")
+@XmlRootElement(name = "subscription")
 @XmlAccessorType (XmlAccessType.FIELD)
-public class GamePOJO {
+public class SubscriptionPOJO {
 
 	private long id;
 	private String name;
-	private int age;
-	private String type;
 	private String description;
+	private double price;
 	
-	public static int POSITION_ID = 0;
-	public static int POSITION_NAME = 1;
-	public static int POSITION_AGE = 2;
-	public static int POSITION_TYPE = 3;
-	public static int POSITION_DESCRIPTION = 4;
+	private static int POSITION_ID = 0;
+	private static int POSITION_NAME = 1;
+	private static int POSITION_DESCRIPTION = 2;
+	private static int POSITION_PRICE = 3;
 	
 	public long getId() {
 		return id;
@@ -32,38 +30,27 @@ public class GamePOJO {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getAge() {
-		return age;
-	}
-	public void setAge(int age) {
-		this.age = age;
-	}
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
 	public String getDescription() {
 		return description;
 	}
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String toString ()
-	{
-		return "Name: " + name + " Age: " + age + " Type: " + type + " Description: " + description;
+	public double getPrice() {
+		return price;
 	}
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	
 	public Object[] getObjectArray ()
 	{
-		Object [] objeto = new Object[5];
+		Object [] objeto = new Object[4];
 		objeto[POSITION_ID] = id;
 		objeto[POSITION_NAME] = name;
-		objeto[POSITION_AGE] = age;
 		objeto[POSITION_DESCRIPTION] = description;
-		objeto[POSITION_TYPE] = type;
+		objeto[POSITION_PRICE] = price;
 		
 		return objeto;
 	}
-	
 }

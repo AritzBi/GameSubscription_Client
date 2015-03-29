@@ -6,8 +6,6 @@ import gamesubscription.client.service.GameService;
 import java.util.List;
 import java.util.Observer;
 
-import javax.xml.bind.JAXBException;
-
 import org.apache.ws.axis2.xsd.Game;
 
 public class GameController {

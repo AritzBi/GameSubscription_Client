@@ -62,6 +62,7 @@ public class GameGUI extends JFrame implements Observer {
 			rows[i][POSITION_DESCRIPTION] = gamePOJO.getDescription();
 			i++;
 		}
+		refrescarTabla();
 	}
 
 	private boolean volcadoDeTabla() {
@@ -166,7 +167,6 @@ public class GameGUI extends JFrame implements Observer {
 					.getAbsolutePath());
 			if (games != null && games.size() > 0) {
 				rellenarTablaConGamesPOJO(games);
-				refrescarTabla();
 			}
 		}
 	}
