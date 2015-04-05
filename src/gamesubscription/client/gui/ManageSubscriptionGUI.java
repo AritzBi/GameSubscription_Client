@@ -102,6 +102,12 @@ public class ManageSubscriptionGUI extends JFrame
 		refrescarTabla();
 	}
 	
+	private void rellenarTablaConSubscripciones( List<SubscriptionPOJO> subscriptions ) {
+		this.subscriptions.clear();
+		this.subscriptions = subscriptions;
+		refrescarTabla();
+	}
+	
 	private void refrescarTabla() {
 		model.setRowCount(0);
 		for (int i = 0; i < subscriptions.size(); i++) {
@@ -355,14 +361,52 @@ public class ManageSubscriptionGUI extends JFrame
 		
 	}
 	private void botonBorrar(){
-		
+		SubscriptionPOJO subs = subscriptions.get( tablaSubscriptions.getSelectedRow() );
+		if ( controller.deleteSubscription(subs.getId()) )
+		{
+			rellenarTablaConSubscripciones( controller.findByGameId(gamePOJO.getId()) );
+		}	
 	}
 	private void botonNueva(){
-		
+		tablaSubscriptions.clearSelection();
+		cajaId.setEnabled(false);
+		cajaId.setEditable(true);
+		cajaId.setText("");
+		cajaDescription.setText("");
+		cajaName.setText("");
+		cajaPrice.setText("");
+
 	}
 	private void botonGuardar(){
-		
+		if ( cajaId.isEditable() )
+		{
+			SubscriptionPOJO subscription = getSubscriptionFromCells();
+			if ( controller.insertSubscription(subscription) )
+			{
+				rellenarTablaConSubscripciones(controller.findByGameId(gamePOJO.getId() ) );
+			}
+		}
+		else
+		{
+			SubscriptionPOJO subscription = getSubscriptionFromCells();
+			if ( controller.updateSubscription(subscription) )
+			{
+				rellenarTablaConSubscripciones(controller.findByGameId(gamePOJO.getId() ));
+			}
+		}
 	}
+	
+	private SubscriptionPOJO getSubscriptionFromCells ()
+	{
+		SubscriptionPOJO subscriptionPOJO = new SubscriptionPOJO();
+		subscriptionPOJO.setPrice(Integer.valueOf(cajaPrice.getText()));
+		subscriptionPOJO.setDescription(cajaDescription.getText());
+		subscriptionPOJO.setId(Long.valueOf(cajaId.getText()));
+		subscriptionPOJO.setName(cajaName.getText());
+		
+		return subscriptionPOJO;
+	}
+	
 	private void botonCerrar(){
 		setVisible(false);
 		manageGameGUI.setVisible(true);

@@ -18,4 +18,22 @@ public class ManageClientGUIController {
 	{
 		return service.findByGameAndSubscription(game, subscription);
 	}
+	
+	public boolean deleteSubscription (  long game, long subscription, String dniCliente )
+	{
+		return service.deleteSubscription(game, subscription, dniCliente);
+	}
+	
+	//TODO: lo hacemos con el metodo PUT?
+	public boolean insertClient ( ClientPOJO clientPOJO )
+	{
+		return true;
+	}
+	
+	//TODO: lo hacemos con el metodo POST?
+	public boolean updateClient ( ClientPOJO clientPOJO )
+	{
+		return true;
+	}
+
 }

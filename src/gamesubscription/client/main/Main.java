@@ -2,7 +2,6 @@ package gamesubscription.client.main;
 import gamesubscription.client.controller.ManageClientGUIController;
 import gamesubscription.client.controller.ManageGameGUIController;
 import gamesubscription.client.controller.ManageSubscriptionGUIController;
-import gamesubscription.client.gui.ManageClientGUI;
 import gamesubscription.client.gui.ManageGameGUI;
 import gamesubscription.client.service.ClientService;
 import gamesubscription.client.service.GameService;

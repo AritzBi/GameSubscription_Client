@@ -1,42 +1,42 @@
 package gamesubscription.client.gui;
 
 import gamesubscription.client.controller.ManageClientGUIController;
+import gamesubscription.client.pojo.ClientPOJO;
 import gamesubscription.client.pojo.GamePOJO;
 import gamesubscription.client.pojo.SubscriptionPOJO;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 public class ManageClientGUI extends JFrame {
 
 	private static final long serialVersionUID = -1486649379710690407L;
 	
 	private JPanel jPanel1;
-	private JCheckBox checkActiva;
 	private JLabel labelPrice;
 	private JLabel labelDescription;
 	private JLabel labelName;
-	private JTextField cajaTelefono;
+	private JTextField cajaDNI;
 	private JLabel jLabel3;
 	private JLabel jLabel4;
 	private JLabel jLabel5;
 	private JLabel labelId;
-	private JTextField cajaPromocion;
+	private JTextField cajaTelephone;
 	private JLabel jLabel9;
 	private JLabel jLabel7;
 	private JLabel jLabel6;
@@ -46,12 +46,12 @@ public class ManageClientGUI extends JFrame {
 	private JButton botonNueva;
 	private JButton botonEditar;
 	private JButton botonDeleteSubscription;
-	private JTable tablaLineas;
+	private JTable tablaClientes;
 	private JScrollPane jScrollPane1;
 	private JLabel jLabel8;
-	private JTextField cajaDatos;
-	private JTextField cajaVoz;
-	private JTextField cajaAntiguedad;
+	private JTextField cajaAddress;
+	private JTextField cajaSurname;
+	private JTextField cajaName;
 	private JPanel jPanel3;
 	private JPanel jPanel2;
 	private JLabel jLabel1;
@@ -60,19 +60,9 @@ public class ManageClientGUI extends JFrame {
 	private SubscriptionPOJO subscriptionPOJO;
 	private ManageSubscriptionGUI manageSubscriptionGUI;
 	private ManageClientGUIController controller;
-
-	/**
-	* Auto-generated main method to display this JFrame
-	*/
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				ManageClientGUI inst = new ManageClientGUI();
-				inst.setLocationRelativeTo(null);
-				inst.setVisible(true);
-			}
-		});
-	}
+	
+	private DefaultTableModel model;
+	private List<ClientPOJO> clients;
 	
 	public ManageClientGUI ( )
 	{
@@ -85,12 +75,46 @@ public class ManageClientGUI extends JFrame {
 		this.gamePOJO = gamePOJO;
 		this.subscriptionPOJO = subscriptionPOJO;
 		this.controller = controller;
+		this.setVisible(true);
+		clients = new ArrayList<ClientPOJO>();
 		initGUI();
+		rellenarTablaDatosPrueba();
+		this.setLocationRelativeTo(null);
+		
 	}
 	
 	public void setManageSubscriptionGUI(ManageSubscriptionGUI manageSubscriptionGUI) {
 		this.manageSubscriptionGUI = manageSubscriptionGUI;
 		this.manageSubscriptionGUI.setVisible(false);
+	}
+	
+	private void rellenarTablaDatosPrueba() {
+		clients.clear();
+		ClientPOJO clientPOJO = null;
+		for (int i = 0; i < 5; i++) {
+			clientPOJO = new ClientPOJO();
+			clientPOJO.setAddress("Mariano Ciriquiain");
+			clientPOJO.setDni("45893945E");
+			clientPOJO.setName("Aitor");
+			clientPOJO.setSurname("Simon");
+			clientPOJO.setPhone("671150776");
+			clients.add(clientPOJO);
+		}
+		refrescarTabla();
+	}
+	
+	private void rellenarTablaConClientes( List<ClientPOJO> clients ) {
+		this.clients.clear();
+		this.clients = clients;
+		refrescarTabla();
+	}
+	
+	private void refrescarTabla() {
+		model.setRowCount(0);
+		for (int i = 0; i < clients.size(); i++) {
+			model.addRow(clients.get(i).getObjectArray());
+		}
+		model.fireTableDataChanged();
 	}
 
 	private void initGUI() {
@@ -120,7 +144,7 @@ public class ManageClientGUI extends JFrame {
 				{
 					jLabel6 = new JLabel();
 					jPanel1.add(jLabel6);
-					jLabel6.setText("Description:");
+					jLabel6.setText("Descript:");
 					jLabel6.setBounds(11, 66, 62, 16);
 				}
 				{
@@ -170,12 +194,12 @@ public class ManageClientGUI extends JFrame {
 					jPanel2.add(jScrollPane1);
 					jScrollPane1.setBounds(12, 24, 336, 84);
 					{
-						TableModel jTable1Model = 
+						model = 
 							new DefaultTableModel(
-									new String[] { "Teléfono", "Antiguedad", "Activa", "Promoción" }, 2);
-						tablaLineas = new JTable();
-						jScrollPane1.setViewportView(tablaLineas);
-						tablaLineas.setModel(jTable1Model);
+									new String[] { "DNI", "Name", "Surname", "Address", "Telephone" }, 2);
+						tablaClientes = new JTable();
+						jScrollPane1.setViewportView(tablaClientes);
+						tablaClientes.setModel(model);
 					}
 				}
 				{
@@ -211,45 +235,45 @@ public class ManageClientGUI extends JFrame {
 				{
 					jLabel3 = new JLabel();
 					jPanel3.add(jLabel3);
-					jLabel3.setText("Telefono:");
+					jLabel3.setText("DNI:");
 					jLabel3.setBounds(10, 24, 64, 16);
 				}
 				{
-					cajaTelefono = new JTextField();
-					jPanel3.add(cajaTelefono);
-					cajaTelefono.setBounds(86, 21, 87, 23);
+					cajaDNI = new JTextField();
+					jPanel3.add(cajaDNI);
+					cajaDNI.setBounds(86, 21, 87, 23);
 				}
 				{
-					cajaAntiguedad = new JTextField();
-					jPanel3.add(cajaAntiguedad);
-					cajaAntiguedad.setBounds(86, 50, 87, 23);
+					cajaName = new JTextField();
+					jPanel3.add(cajaName);
+					cajaName.setBounds(86, 50, 87, 23);
 				}
 				{
 					jLabel5 = new JLabel();
 					jPanel3.add(jLabel5);
-					jLabel5.setText("Antiguedad:");
+					jLabel5.setText("Name:");
 					jLabel5.setBounds(10, 53, 71, 16);
 				}
 				{
 					jLabel4 = new JLabel();
 					jPanel3.add(jLabel4);
-					jLabel4.setText("Tarifa voz:");
+					jLabel4.setText("Surname:");
 					jLabel4.setBounds(10, 81, 71, 16);
 				}
 				{
-					cajaVoz = new JTextField();
-					jPanel3.add(cajaVoz);
-					cajaVoz.setBounds(85, 78, 263, 23);
+					cajaSurname = new JTextField();
+					jPanel3.add(cajaSurname);
+					cajaSurname.setBounds(85, 78, 263, 23);
 				}
 				{
-					cajaDatos = new JTextField();
-					jPanel3.add(cajaDatos);
-					cajaDatos.setBounds(85, 107, 263, 23);
+					cajaAddress = new JTextField();
+					jPanel3.add(cajaAddress);
+					cajaAddress.setBounds(85, 107, 263, 23);
 				}
 				{
 					jLabel8 = new JLabel();
 					jPanel3.add(jLabel8);
-					jLabel8.setText("Tarifa datos:");
+					jLabel8.setText("Address:");
 					jLabel8.setBounds(10, 110, 71, 16);
 				}
 				{
@@ -277,19 +301,13 @@ public class ManageClientGUI extends JFrame {
 				{
 					jLabel9 = new JLabel();
 					jPanel3.add(jLabel9);
-					jLabel9.setText("Promoción:");
+					jLabel9.setText("Telephone:");
 					jLabel9.setBounds(10, 138, 71, 16);
 				}
 				{
-					cajaPromocion = new JTextField();
-					jPanel3.add(cajaPromocion);
-					cajaPromocion.setBounds(87, 135, 261, 23);
-				}
-				{
-					checkActiva = new JCheckBox();
-					jPanel3.add(checkActiva);
-					checkActiva.setText("Activa ");
-					checkActiva.setBounds(197, 51, 69, 20);
+					cajaTelephone = new JTextField();
+					jPanel3.add(cajaTelephone);
+					cajaTelephone.setBounds(87, 135, 261, 23);
 				}
 			}
 			{
@@ -306,25 +324,84 @@ public class ManageClientGUI extends JFrame {
 			pack();
 			this.setSize(400, 544);
 		} catch (Exception e) {
-		    //add your error handling code here
 			e.printStackTrace();
 		}
 	}
 	
 	private void botonEditar(){
-		
+		int row = tablaClientes.getSelectedRow();
+		if ( row > -1 )
+		{
+			ClientPOJO client = clients.get(row);
+			cajaDNI.setEditable(false);
+			cajaDNI.setText(client.getDni());
+			cajaAddress.setText(client.getAddress());
+			cajaName.setText(client.getName());
+			cajaSurname.setText(client.getSurname());
+			cajaTelephone.setText(client.getPhone());
+		}
+		else
+		{
+			JOptionPane.showMessageDialog(this, "You must select a subscriber");
+		}
 	}
 	private void botonDeleteSubscription(){
+		int row = tablaClientes.getSelectedRow();
 		
+		if ( row > -1 )
+		{
+			String dniCliente = clients.get(row).getDni();
+			long idSubscription = subscriptionPOJO.getId();
+			long idGame = gamePOJO.getId();
+			
+			if ( controller.deleteSubscription(idGame, idSubscription, dniCliente) )
+			{
+				rellenarTablaConClientes ( controller.findByGameAndSubscription(idGame, idSubscription) );
+			}
+		}
 	}
 	private void botonNueva(){
+		cajaDNI.setEnabled(false);
+		cajaDNI.setEditable(true);
+		tablaClientes.clearSelection();
 		
+		cajaDNI.setText("");
+		cajaName.setText("");
+		cajaSurname.setText("");
+		cajaAddress.setText("");
+		cajaTelephone.setText("");
 	}
 	private void botonGuardar(){
+		if ( cajaDNI.isEditable() )
+		{
+			if ( controller.insertClient(getClientFromCells()) )
+			{
+				rellenarTablaConClientes( controller.findByGameAndSubscription(gamePOJO.getId(), subscriptionPOJO.getId()) );
+			}
+		}
+		else
+		{
+			if ( controller.updateClient(getClientFromCells()) )
+			{
+				rellenarTablaConClientes( controller.findByGameAndSubscription(gamePOJO.getId(), subscriptionPOJO.getId()) );
+			}
+		}
+	}
+	
+	private ClientPOJO getClientFromCells()
+	{
+		ClientPOJO clientPOJO = new ClientPOJO();
+		clientPOJO.setDni(cajaDNI.getText());
+		clientPOJO.setAddress(cajaAddress.getText());
+		clientPOJO.setName(cajaName.getText());
+		clientPOJO.setPhone(cajaTelephone.getText());
+		clientPOJO.setSurname(cajaSurname.getText());
 		
+		return clientPOJO;
 	}
 	private void botonCerrar(){
-		
+		this.dispose();
+		manageSubscriptionGUI.setVisible(true);
 	}
 	
 }

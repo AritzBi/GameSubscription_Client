@@ -18,4 +18,21 @@ public class ManageSubscriptionGUIController {
 	{
 		return service.findByGameId(id);
 	}
+	
+	public boolean deleteSubscription ( long id )
+	{
+		return service.deleteSubscription(id);
+	}
+	
+	//TODO: utilizamos put?
+	public boolean insertSubscription ( SubscriptionPOJO subscription )
+	{
+		return true;
+	}
+	
+	//TODO: utilizamos post?
+	public boolean updateSubscription ( SubscriptionPOJO subscription )
+	{
+		return true;
+	}
 }

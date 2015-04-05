@@ -338,6 +338,7 @@ public class ManageGameGUI extends JFrame {
 		if (fila >= 0) {
 			GamePOJO gamePOJO = games.get(fila);
 			cajaId.setText(String.valueOf(gamePOJO.getId()));
+			cajaId.setEditable(false);
 			cajaName.setText(gamePOJO.getName());
 			cajaDescription.setText(gamePOJO.getDescription());
 			cajaType.setText(gamePOJO.getType());
@@ -360,11 +361,41 @@ public class ManageGameGUI extends JFrame {
 	}
 
 	private void botonNuevo() {
-
+		tablaClientes.clearSelection();
+		cajaId.setText("");
+		cajaId.setEditable(true);
+		cajaName.setText("");
+		cajaAge.setText("");
+		cajaType.setText("");
+		cajaDescription.setText("");
+		
 	}
 
 	private void botonGuardar() {
-
+		if ( cajaId.isEditable() )
+		{
+			GamePOJO game = getGameFromCells();
+			controller.insertGame(game);
+			rellenarTablaConGamesPOJO(controller.findAll() );
+		}
+		else
+		{
+			GamePOJO game = getGameFromCells();
+			controller.updateGame(game);
+			rellenarTablaConGamesPOJO(controller.findAll());
+		}
+	}
+	
+	private GamePOJO getGameFromCells ()
+	{
+		GamePOJO gamePOJO = new GamePOJO();
+		gamePOJO.setAge(Integer.valueOf(cajaAge.getText()));
+		gamePOJO.setDescription(cajaDescription.getText());
+		gamePOJO.setId(Long.valueOf(cajaId.getText()));
+		gamePOJO.setType(cajaType.getText());
+		gamePOJO.setName(cajaName.getText());
+		
+		return gamePOJO;
 	}
 
 	private void botonSalir() {

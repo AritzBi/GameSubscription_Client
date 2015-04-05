@@ -23,4 +23,14 @@ public class ManageGameGUIController {
 	{
 		return gameService.findById(id);
 	}
+	
+	public long insertGame ( GamePOJO gamePOJO )
+	{
+		return gameService.insertGame(gamePOJO.getGame());
+	}
+	
+	public void updateGame ( GamePOJO gamePOJO )
+	{
+		gameService.updateGame(gamePOJO);
+	}
 }

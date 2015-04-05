@@ -4,6 +4,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.ws.axis2.xsd.Game;
+
 @XmlRootElement(name = "game")
 @XmlAccessorType (XmlAccessType.FIELD)
 public class GamePOJO {
@@ -64,6 +66,18 @@ public class GamePOJO {
 		objeto[POSITION_TYPE] = type;
 		
 		return objeto;
+	}
+	
+	public Game getGame ()
+	{
+		Game game = new Game();
+		game.setId((int)id);
+		game.setAge(age);
+		game.setDescription(description);
+		game.setName(name);
+		game.setType(type);
+		
+		return game;
 	}
 	
 }

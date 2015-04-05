@@ -22,6 +22,9 @@ import org.apache.ws.axis2.InsertGame;
 import org.apache.ws.axis2.InsertGameResponse;
 import org.apache.ws.axis2.xsd.Game;
 
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.UniformInterfaceException;
+
 public class GameService {
 
 	private List<Observer> observers;
@@ -70,7 +73,15 @@ public class GameService {
 		List<GamePOJO> ltaGames = new ArrayList<GamePOJO>();
 		
 		ClientJersey clientJersey = ClientJersey.getInstance();
-		Games games = clientJersey.getService().path("games").accept(MediaType.APPLICATION_XML).get(Games.class);
+		Games games = null;
+		
+		try {
+			games = clientJersey.getService().path("games").accept(MediaType.APPLICATION_XML).get(Games.class);
+		}catch(UniformInterfaceException e){
+			ClientResponse r = e.getResponse();
+			System.out.println("games.GET('application/xml').status: " + r.getStatus());
+			System.out.println("games.GET('application/xml').entity: " + r.getEntity(String.class));
+		}
 		
 		if ( games != null )
 		{
@@ -82,17 +93,19 @@ public class GameService {
 	public GamePOJO findById ( Long id )
 	{
 		GamePOJO gamePOJO = null;
-		
 		ClientJersey clientJersey = ClientJersey.getInstance();
 		
-		if ( id != null )
-		{
+		if ( id != null ) {
 			String idstring = String.valueOf(id);
+			try {
 			gamePOJO = clientJersey.getService().path("games").path(idstring).accept(MediaType.APPLICATION_XML).get(GamePOJO.class);
+			}catch(UniformInterfaceException e){
+				ClientResponse r = e.getResponse();
+				System.out.println("game " + id + ".GET('application/xml').status: " + r.getStatus());
+				System.out.println("game " + id + ".GET('application/xml').entity: " + r.getEntity(String.class));
+			}
 		}
-		
 		return gamePOJO;
-		
 	}
 
 	public List<GamePOJO> processXMLFile(String path) {
@@ -113,6 +126,24 @@ public class GameService {
 			e.printStackTrace();
 		}
 		return listaGames;
+	}
+	
+	//TODO: me falta saber como lo van a hacer en la API para devolver una respuesta
+	public boolean updateGame ( GamePOJO gamePOJO )
+	{
+		boolean success = false;
+		if ( gamePOJO != null )
+		{
+			try{
+				ClientJersey.getInstance().getService().path("games").path(String.valueOf(gamePOJO.getId())).type(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, gamePOJO);
+				success = true;
+			}catch(UniformInterfaceException e){
+				ClientResponse r = e.getResponse();
+				System.out.println("game " + gamePOJO.getId() + ".POST('application/xml').status: " + r.getStatus());
+				System.out.println("game " + gamePOJO.getId() + ".POST('application/xml').entity: " + r.getEntity(String.class));
+			}
+		}
+		return success;
 	}
 
 }
