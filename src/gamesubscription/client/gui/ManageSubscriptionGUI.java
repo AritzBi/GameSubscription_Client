@@ -419,7 +419,7 @@ public class ManageSubscriptionGUI extends JFrame
 		if ( idSubscription > -1 )
 		{
 			SubscriptionPOJO subscription = subscriptions.get(idSubscription);
-			ManageSubscriptionGameGUI gui = new ManageSubscriptionGameGUI( gamePOJO, subscription, clientController );
+			ManageSubscriptionGameGUI gui = new ManageSubscriptionGameGUI( subscription, clientController );
 			gui.setManageSubscriptionGUI(this);
 			
 		}

@@ -69,4 +69,9 @@ public class ClientPOJO {
 		
 		return objeto;
 	}
+	
+	public String toString()
+	{
+		return dni;
+	}
 }

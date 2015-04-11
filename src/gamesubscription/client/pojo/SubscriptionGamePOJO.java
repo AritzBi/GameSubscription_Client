@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "subscription")
@@ -12,6 +13,7 @@ public class SubscriptionGamePOJO {
 
 	private Date fechaSuscripcion;
 	
+	@XmlElement(name = "client")
 	private ClientPOJO cliente;
 	
 	private static int POSITION_FECHA_SUS = 5;

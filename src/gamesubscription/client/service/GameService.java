@@ -107,7 +107,6 @@ public class GameService {
 			}catch(UniformInterfaceException e){
 				ClientResponse r = e.getResponse();
 				System.out.println("game " + id + ".GET('application/xml').status: " + r.getStatus());
-				System.out.println("game " + id + ".GET('application/xml').entity: " + r.getEntity(String.class));
 			}
 		}
 		return gamePOJO;

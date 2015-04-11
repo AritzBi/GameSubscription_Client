@@ -2,18 +2,19 @@ package gamesubscription.client.gui;
 
 import gamesubscription.client.controller.ManageSubscriptionGameGUIController;
 import gamesubscription.client.pojo.ClientPOJO;
-import gamesubscription.client.pojo.GamePOJO;
 import gamesubscription.client.pojo.SubscriptionGamePOJO;
 import gamesubscription.client.pojo.SubscriptionPOJO;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -34,6 +35,7 @@ public class ManageSubscriptionGameGUI extends JFrame {
 	private JLabel labelDescription;
 	private JLabel labelName;
 	private JTextField cajaDNI;
+	private JComboBox<ClientPOJO> cajaClientes;
 	private JLabel jLabel3;
 	private JLabel jLabel4;
 	private JLabel jLabel5;
@@ -43,11 +45,15 @@ public class ManageSubscriptionGameGUI extends JFrame {
 	private JLabel jLabel7;
 	private JLabel jLabel6;
 	private JLabel jLabel2;
+	
 	private JButton botonCerrar;
 	private JButton botonGuardar;
-	private JButton botonNueva;
-	private JButton botonEditar;
+	private JButton botonCancel;
+	private JButton botonNewSubscriptor;
+	private JButton botonNewCliente;
+	private JButton botonEditCliente;
 	private JButton botonDeleteSubscription;
+	
 	private JTable tablaClientes;
 	private JScrollPane jScrollPane1;
 	private JLabel jLabel8;
@@ -58,7 +64,6 @@ public class ManageSubscriptionGameGUI extends JFrame {
 	private JPanel jPanel2;
 	private JLabel jLabel1;
 	
-	private GamePOJO gamePOJO;
 	private SubscriptionPOJO subscriptionPOJO;
 	private ManageSubscriptionGUI manageSubscriptionGUI;
 	private ManageSubscriptionGameGUIController controller;
@@ -72,9 +77,8 @@ public class ManageSubscriptionGameGUI extends JFrame {
 		initGUI();
 	}
 	
-	public ManageSubscriptionGameGUI( GamePOJO gamePOJO, SubscriptionPOJO subscriptionPOJO, ManageSubscriptionGameGUIController controller ) {
+	public ManageSubscriptionGameGUI( SubscriptionPOJO subscriptionPOJO, ManageSubscriptionGameGUIController controller ) {
 		super();
-		this.gamePOJO = gamePOJO;
 		this.subscriptionPOJO = subscriptionPOJO;
 		this.controller = controller;
 		this.setVisible(true);
@@ -96,7 +100,8 @@ public class ManageSubscriptionGameGUI extends JFrame {
 		ClientPOJO clientPOJO = null;
 		for (int i = 0; i < 5; i++) {
 			subscription = new SubscriptionGamePOJO();
-			subscription.setFechaSuscripcion(new Date ( 2015, 03, 04) );
+			java.util.Date date = new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime();
+			subscription.setFechaSuscripcion(date );
 			clientPOJO = new ClientPOJO();
 			clientPOJO.setAddress("Mariano Ciriquiain");
 			clientPOJO.setDni("45893945E");
@@ -192,7 +197,7 @@ public class ManageSubscriptionGameGUI extends JFrame {
 				jPanel2 = new JPanel();
 				getContentPane().add(jPanel2);
 				jPanel2.setFont(new java.awt.Font("Dialog",0,8));
-				jPanel2.setBounds(13, 140, 360, 145);
+				jPanel2.setBounds(13, 140, 360, 170);
 				jPanel2.setLayout(null);
 				jPanel2.setBorder(BorderFactory.createTitledBorder(null, "Subscribed clients", TitledBorder.LEADING, TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI",1,10), new java.awt.Color(0,0,0)));
 				{
@@ -202,7 +207,7 @@ public class ManageSubscriptionGameGUI extends JFrame {
 					{
 						model = 
 							new DefaultTableModel(
-									new String[] { "DNI", "Name", "Surname", "Address", "Telephone" }, 2);
+									new String[] { "DNI", "Name", "Surname", "Address", "Telephone","Date" }, 2);
 						tablaClientes = new JTable();
 						jScrollPane1.setViewportView(tablaClientes);
 						tablaClientes.setModel(model);
@@ -220,13 +225,35 @@ public class ManageSubscriptionGameGUI extends JFrame {
 					});
 				}
 				{
-					botonEditar = new JButton();
-					jPanel2.add(botonEditar);
-					botonEditar.setText("Edit");
-					botonEditar.setBounds(119, 113, 70, 23);
-					botonEditar.addActionListener(new ActionListener() {
+					botonEditCliente = new JButton();
+					jPanel2.add(botonEditCliente);
+					botonEditCliente.setText("Edit Client");
+					botonEditCliente.setBounds(194, 140, 150, 23);
+					botonEditCliente.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent evt) {
 							botonEditar();
+						}
+					});
+				}
+				{
+					botonNewSubscriptor = new JButton();
+					jPanel2.add(botonNewSubscriptor);
+					botonNewSubscriptor.setText("New Subscription");
+					botonNewSubscriptor.setBounds(50, 113, 140, 23);
+					botonNewSubscriptor.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent evt) {
+							botonNewSubscriptor();
+						}
+					});
+				}
+				{
+					botonNewCliente = new JButton();
+					jPanel2.add(botonNewCliente);
+					botonNewCliente.setText("New Client");
+					botonNewCliente.setBounds(80, 140, 110, 23);
+					botonNewCliente.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent evt) {
+							botonNewClient();
 						}
 					});
 				}
@@ -248,6 +275,12 @@ public class ManageSubscriptionGameGUI extends JFrame {
 					cajaDNI = new JTextField();
 					jPanel3.add(cajaDNI);
 					cajaDNI.setBounds(86, 21, 87, 23);
+				}
+				{
+					cajaClientes = new JComboBox<ClientPOJO>();
+					cajaClientes.setVisible(false);
+					jPanel3.add(cajaClientes);
+					cajaClientes.setBounds(86, 21, 87, 23);
 				}
 				{
 					cajaName = new JTextField();
@@ -283,15 +316,16 @@ public class ManageSubscriptionGameGUI extends JFrame {
 					jLabel8.setBounds(10, 110, 71, 16);
 				}
 				{
-					botonNueva = new JButton();
-					jPanel3.add(botonNueva);
-					botonNueva.setText("New");
-					botonNueva.setBounds(183, 21, 78, 23);
-					botonNueva.addActionListener(new ActionListener() {
+					botonCancel = new JButton();
+					jPanel3.add(botonCancel);
+					botonCancel.setText("Cancel");
+					botonCancel.setBounds(183, 21, 78, 23);
+					botonCancel.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent evt) {
-							botonNueva();
+							botonCancel();
 						}
 					});
+					botonCancel.setVisible(false);
 				}
 				{
 					botonGuardar = new JButton();
@@ -303,6 +337,7 @@ public class ManageSubscriptionGameGUI extends JFrame {
 							botonGuardar();
 						}
 					});
+					botonGuardar.setVisible(false);
 				}
 				{
 					jLabel9 = new JLabel();
@@ -334,10 +369,17 @@ public class ManageSubscriptionGameGUI extends JFrame {
 		}
 	}
 	
+	private void botonNewClient()
+	{
+		estadoInicialFields();
+		
+	}
 	private void botonEditar(){
 		int row = tablaClientes.getSelectedRow();
 		if ( row > -1 )
 		{
+			estadoEditarClienteFields();
+			mostrarBotoneraGuardarYCancelar();
 			ClientPOJO client = subscriptionsGame.get(row).getCliente();
 			cajaDNI.setEditable(false);
 			cajaDNI.setText(client.getDni());
@@ -348,7 +390,7 @@ public class ManageSubscriptionGameGUI extends JFrame {
 		}
 		else
 		{
-			JOptionPane.showMessageDialog(this, "You must select a subscriber");
+			JOptionPane.showMessageDialog(this, "You must select a client");
 		}
 	}
 	private void botonDeleteSubscription(){
@@ -364,33 +406,102 @@ public class ManageSubscriptionGameGUI extends JFrame {
 				rellenarTablaConClientes ( controller.findBySubscriptionId(idSubscription) );
 			}
 		}
+		else
+		{
+			JOptionPane.showMessageDialog(this, "You must select a subscription");
+		}
 	}
-	private void botonNueva(){
-		cajaDNI.setEnabled(false);
+	
+	private void botonNewSubscriptor() {
+		estadoNuevaSusFields();
+		mostrarBotoneraGuardarYCancelar();
+	}
+	
+	private void botonCancel(){
+		estadoInicialFields();
+		ocultarBotoneraGuardarYCancelar();
+	}
+	
+	private void estadoInicialFields()
+	{
+		cajaDNI.setEnabled(true);
+		cajaDNI.setVisible(true);
+		cajaClientes.setVisible(false);
 		cajaDNI.setEditable(true);
 		tablaClientes.clearSelection();
 		
 		cajaDNI.setText("");
 		cajaName.setText("");
+		cajaName.setEditable(true);
+		cajaName.setEnabled(true);
 		cajaSurname.setText("");
+		cajaSurname.setEditable(true);
+		cajaSurname.setEnabled(true);
 		cajaAddress.setText("");
+		cajaAddress.setEditable(true);
+		cajaAddress.setEnabled(true);
+		cajaTelephone.setEnabled(true);
+		cajaTelephone.setEditable(true);
 		cajaTelephone.setText("");
 	}
-	private void botonGuardar(){
-		if ( cajaDNI.isEditable() )
+	
+	private void estadoEditarClienteFields()
+	{
+		cajaDNI.setEditable(false);
+	}
+	
+	private void estadoNuevaSusFields()
+	{
+		List<ClientPOJO> clientes = controller.findAll();
+		
+		for ( ClientPOJO cliente: clientes )
 		{
-			if ( controller.insertClient(getClientFromCells()) )
-			{
-				rellenarTablaConClientes( controller.findBySubscriptionId( subscriptionPOJO.getId()) );
-			}
+			cajaClientes.addItem(cliente);
+		}
+		
+		cajaClientes.setVisible(true);
+		cajaDNI.setVisible(false);
+		
+		cajaAddress.setEnabled(false);
+		cajaName.setEnabled(false);
+		cajaSurname.setEnabled(false);
+		cajaTelephone.setEnabled(false);
+	}
+	
+	private void mostrarBotoneraGuardarYCancelar()
+	{
+		botonCancel.setVisible(true);
+		botonGuardar.setVisible(true);
+	}
+	
+	private void ocultarBotoneraGuardarYCancelar()
+	{
+		botonCancel.setVisible(false);
+		botonGuardar.setVisible(false);
+	}
+	
+	private void botonGuardar(){
+		if ( cajaDNI.isVisible() )
+		{
+				if ( cajaDNI.isEditable() )
+				{
+					controller.insertClient(getClientFromCells());
+				}
+				else
+				{
+					controller.updateClient(getClientFromCells());
+				}
 		}
 		else
 		{
-			if ( controller.updateClient(getClientFromCells()) )
+			long idCliente = ((ClientPOJO)cajaClientes.getSelectedItem()).getId();
+			if ( controller.insertSubscription(subscriptionPOJO.getId(), idCliente) )
 			{
 				rellenarTablaConClientes( controller.findBySubscriptionId(subscriptionPOJO.getId()) );
 			}
 		}
+		estadoInicialFields();
+		ocultarBotoneraGuardarYCancelar();
 	}
 	
 	private ClientPOJO getClientFromCells()

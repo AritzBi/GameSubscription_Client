@@ -28,16 +28,24 @@ public class ManageSubscriptionGameGUIController {
 		return subscriptionGameService.deleteSubscription(subscription, idCliente);
 	}
 	
-	//TODO: lo hacemos con el metodo PUT?
 	public boolean insertClient ( ClientPOJO clientPOJO )
 	{
-		return true;
+		return service.insertClient(clientPOJO);
 	}
 	
-	//TODO: lo hacemos con el metodo POST?
 	public boolean updateClient ( ClientPOJO clientPOJO )
 	{
-		return true;
+		return service.modifyClient(clientPOJO);
+	}
+	
+	public List<ClientPOJO> findAll ()
+	{
+		return service.findAll();
+	}
+	
+	public boolean insertSubscription ( long idSubscription, long idClient )
+	{
+		return subscriptionGameService.insertSubscription(idSubscription, idClient);
 	}
 
 }
