@@ -1,6 +1,7 @@
 package gamesubscription.client.service;
 
 import gamesubscription.client.pojo.ClientJersey;
+import gamesubscription.client.pojo.ClientPOJO;
 import gamesubscription.client.pojo.GamePOJO;
 import gamesubscription.client.pojo.Games;
 
@@ -82,6 +83,10 @@ public class GameService {
 			System.out.println("games.GET('application/xml').status: " + r.getStatus());
 			System.out.println("games.GET('application/xml').entity: " + r.getEntity(String.class));
 		}
+		catch(Exception e )
+		{
+			e.printStackTrace();
+		}
 		
 		if ( games != null )
 		{
@@ -128,14 +133,13 @@ public class GameService {
 		return listaGames;
 	}
 	
-	//TODO: me falta saber como lo van a hacer en la API para devolver una respuesta
 	public boolean updateGame ( GamePOJO gamePOJO )
 	{
 		boolean success = false;
 		if ( gamePOJO != null )
 		{
 			try{
-				ClientJersey.getInstance().getService().path("games").path(String.valueOf(gamePOJO.getId())).type(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, gamePOJO);
+				ClientJersey.getInstance().getService().path("games").path(String.valueOf(gamePOJO.getId())).type(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, gamePOJO);
 				success = true;
 			}catch(UniformInterfaceException e){
 				ClientResponse r = e.getResponse();
@@ -144,6 +148,18 @@ public class GameService {
 			}
 		}
 		return success;
+	}
+	
+	public static void main ( String [] args )
+	{
+		ClientPOJO clientPOJO = new ClientPOJO();
+		clientPOJO.setDni("45893970T");
+		clientPOJO.setAddress("Mariano Ciriquiain");
+		clientPOJO.setName("Aitor");
+		clientPOJO.setSurname("Simon");
+		clientPOJO.setPhone("944834560");
+		
+		ClientJersey.getInstance().getService().path("clients").type(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, clientPOJO);
 	}
 
 }

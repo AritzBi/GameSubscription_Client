@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType (XmlAccessType.FIELD)
 public class ClientPOJO {
 	
+	private long id;
 	private String dni;
 	private String name;
 	private String surname;
@@ -20,6 +21,12 @@ public class ClientPOJO {
 	private static int POSITION_ADDRESS = 3;
 	private static int POSITION_PHONE = 4;
 	
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
 	public String getDni() {
 		return dni;
 	}
@@ -53,7 +60,7 @@ public class ClientPOJO {
 	
 	public Object[] getObjectArray ()
 	{
-		Object [] objeto = new Object[5];
+		Object [] objeto = new Object[6];
 		objeto[POSITION_DNI] = dni;
 		objeto[POSITION_NAME] = name;
 		objeto[POSITION_SURNAME] = surname;

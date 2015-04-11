@@ -1,12 +1,14 @@
 package gamesubscription.client.gui;
 
-import gamesubscription.client.controller.ManageClientGUIController;
+import gamesubscription.client.controller.ManageSubscriptionGameGUIController;
 import gamesubscription.client.pojo.ClientPOJO;
 import gamesubscription.client.pojo.GamePOJO;
+import gamesubscription.client.pojo.SubscriptionGamePOJO;
 import gamesubscription.client.pojo.SubscriptionPOJO;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +25,7 @@ import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-public class ManageClientGUI extends JFrame {
+public class ManageSubscriptionGameGUI extends JFrame {
 
 	private static final long serialVersionUID = -1486649379710690407L;
 	
@@ -59,24 +61,24 @@ public class ManageClientGUI extends JFrame {
 	private GamePOJO gamePOJO;
 	private SubscriptionPOJO subscriptionPOJO;
 	private ManageSubscriptionGUI manageSubscriptionGUI;
-	private ManageClientGUIController controller;
+	private ManageSubscriptionGameGUIController controller;
 	
 	private DefaultTableModel model;
-	private List<ClientPOJO> clients;
+	private List<SubscriptionGamePOJO> subscriptionsGame;
 	
-	public ManageClientGUI ( )
+	public ManageSubscriptionGameGUI ( )
 	{
 		super();
 		initGUI();
 	}
 	
-	public ManageClientGUI( GamePOJO gamePOJO, SubscriptionPOJO subscriptionPOJO, ManageClientGUIController controller ) {
+	public ManageSubscriptionGameGUI( GamePOJO gamePOJO, SubscriptionPOJO subscriptionPOJO, ManageSubscriptionGameGUIController controller ) {
 		super();
 		this.gamePOJO = gamePOJO;
 		this.subscriptionPOJO = subscriptionPOJO;
 		this.controller = controller;
 		this.setVisible(true);
-		clients = new ArrayList<ClientPOJO>();
+		subscriptionsGame = new ArrayList<SubscriptionGamePOJO>();
 		initGUI();
 		rellenarTablaDatosPrueba();
 		this.setLocationRelativeTo(null);
@@ -89,30 +91,34 @@ public class ManageClientGUI extends JFrame {
 	}
 	
 	private void rellenarTablaDatosPrueba() {
-		clients.clear();
+		subscriptionsGame.clear();
+		SubscriptionGamePOJO subscription = null;
 		ClientPOJO clientPOJO = null;
 		for (int i = 0; i < 5; i++) {
+			subscription = new SubscriptionGamePOJO();
+			subscription.setFechaSuscripcion(new Date ( 2015, 03, 04) );
 			clientPOJO = new ClientPOJO();
 			clientPOJO.setAddress("Mariano Ciriquiain");
 			clientPOJO.setDni("45893945E");
 			clientPOJO.setName("Aitor");
 			clientPOJO.setSurname("Simon");
 			clientPOJO.setPhone("671150776");
-			clients.add(clientPOJO);
+			subscription.setCliente(clientPOJO);
+			subscriptionsGame.add(subscription);
 		}
 		refrescarTabla();
 	}
 	
-	private void rellenarTablaConClientes( List<ClientPOJO> clients ) {
-		this.clients.clear();
-		this.clients = clients;
+	private void rellenarTablaConClientes( List<SubscriptionGamePOJO> subscriptionsGame ) {
+		this.subscriptionsGame.clear();
+		this.subscriptionsGame = subscriptionsGame;
 		refrescarTabla();
 	}
 	
 	private void refrescarTabla() {
 		model.setRowCount(0);
-		for (int i = 0; i < clients.size(); i++) {
-			model.addRow(clients.get(i).getObjectArray());
+		for (int i = 0; i < subscriptionsGame.size(); i++) {
+			model.addRow(subscriptionsGame.get(i).getObjectArray());
 		}
 		model.fireTableDataChanged();
 	}
@@ -332,7 +338,7 @@ public class ManageClientGUI extends JFrame {
 		int row = tablaClientes.getSelectedRow();
 		if ( row > -1 )
 		{
-			ClientPOJO client = clients.get(row);
+			ClientPOJO client = subscriptionsGame.get(row).getCliente();
 			cajaDNI.setEditable(false);
 			cajaDNI.setText(client.getDni());
 			cajaAddress.setText(client.getAddress());
@@ -350,13 +356,12 @@ public class ManageClientGUI extends JFrame {
 		
 		if ( row > -1 )
 		{
-			String dniCliente = clients.get(row).getDni();
+			long idCliente = subscriptionsGame.get(row).getCliente().getId();
 			long idSubscription = subscriptionPOJO.getId();
-			long idGame = gamePOJO.getId();
 			
-			if ( controller.deleteSubscription(idGame, idSubscription, dniCliente) )
+			if ( controller.deleteSubscription( idSubscription, idCliente) )
 			{
-				rellenarTablaConClientes ( controller.findByGameAndSubscription(idGame, idSubscription) );
+				rellenarTablaConClientes ( controller.findBySubscriptionId(idSubscription) );
 			}
 		}
 	}
@@ -376,14 +381,14 @@ public class ManageClientGUI extends JFrame {
 		{
 			if ( controller.insertClient(getClientFromCells()) )
 			{
-				rellenarTablaConClientes( controller.findByGameAndSubscription(gamePOJO.getId(), subscriptionPOJO.getId()) );
+				rellenarTablaConClientes( controller.findBySubscriptionId( subscriptionPOJO.getId()) );
 			}
 		}
 		else
 		{
 			if ( controller.updateClient(getClientFromCells()) )
 			{
-				rellenarTablaConClientes( controller.findByGameAndSubscription(gamePOJO.getId(), subscriptionPOJO.getId()) );
+				rellenarTablaConClientes( controller.findBySubscriptionId(subscriptionPOJO.getId()) );
 			}
 		}
 	}

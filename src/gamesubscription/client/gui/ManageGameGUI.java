@@ -1,6 +1,6 @@
 package gamesubscription.client.gui;
 
-import gamesubscription.client.controller.ManageClientGUIController;
+import gamesubscription.client.controller.ManageSubscriptionGameGUIController;
 import gamesubscription.client.controller.ManageGameGUIController;
 import gamesubscription.client.controller.ManageSubscriptionGUIController;
 import gamesubscription.client.pojo.GamePOJO;
@@ -57,7 +57,7 @@ public class ManageGameGUI extends JFrame {
 	
 	private ManageGameGUIController controller;
 	private ManageSubscriptionGUIController subscriptionController;
-	private ManageClientGUIController clientController;
+	private ManageSubscriptionGameGUIController clientController;
 	
 	public ManageGameGUI(ManageGameGUIController controller) {
 		super();
@@ -407,7 +407,7 @@ public class ManageGameGUI extends JFrame {
 		this.subscriptionController = subscriptionController;
 	}
 
-	public void setClientController(ManageClientGUIController clientController) {
+	public void setClientController(ManageSubscriptionGameGUIController clientController) {
 		this.clientController = clientController;
 	}
 

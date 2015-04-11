@@ -1,6 +1,6 @@
 package gamesubscription.client.gui;
 
-import gamesubscription.client.controller.ManageClientGUIController;
+import gamesubscription.client.controller.ManageSubscriptionGameGUIController;
 import gamesubscription.client.controller.ManageSubscriptionGUIController;
 import gamesubscription.client.pojo.GamePOJO;
 import gamesubscription.client.pojo.SubscriptionPOJO;
@@ -63,7 +63,7 @@ public class ManageSubscriptionGUI extends JFrame
 	
 	private ManageGameGUI manageGameGUI;
 	private ManageSubscriptionGUIController controller;
-	private ManageClientGUIController clientController;
+	private ManageSubscriptionGameGUIController clientController;
 	
 	private GamePOJO gamePOJO;
 	private DefaultTableModel model;
@@ -83,7 +83,7 @@ public class ManageSubscriptionGUI extends JFrame
 		this.setVisible(true);
 	}
 
-	public void setClientController(ManageClientGUIController clientController) {
+	public void setClientController(ManageSubscriptionGameGUIController clientController) {
 		this.clientController = clientController;
 	}
 
@@ -419,7 +419,7 @@ public class ManageSubscriptionGUI extends JFrame
 		if ( idSubscription > -1 )
 		{
 			SubscriptionPOJO subscription = subscriptions.get(idSubscription);
-			ManageClientGUI gui = new ManageClientGUI( gamePOJO, subscription, clientController );
+			ManageSubscriptionGameGUI gui = new ManageSubscriptionGameGUI( gamePOJO, subscription, clientController );
 			gui.setManageSubscriptionGUI(this);
 			
 		}
