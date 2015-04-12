@@ -8,8 +8,6 @@ import gamesubscription.client.pojo.SubscriptionPOJO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -84,7 +82,10 @@ public class ManageSubscriptionGameGUI extends JFrame {
 		this.setVisible(true);
 		subscriptionsGame = new ArrayList<SubscriptionGamePOJO>();
 		initGUI();
-		rellenarTablaDatosPrueba();
+		if ( subscriptionPOJO != null )
+		{
+			rellenarTablaConClientes( controller.findBySubscriptionId(subscriptionPOJO.getId()));
+		}
 		this.setLocationRelativeTo(null);
 		
 	}
@@ -94,7 +95,7 @@ public class ManageSubscriptionGameGUI extends JFrame {
 		this.manageSubscriptionGUI.setVisible(false);
 	}
 	
-	private void rellenarTablaDatosPrueba() {
+	/**private void rellenarTablaDatosPrueba() {
 		subscriptionsGame.clear();
 		SubscriptionGamePOJO subscription = null;
 		ClientPOJO clientPOJO = null;
@@ -112,7 +113,7 @@ public class ManageSubscriptionGameGUI extends JFrame {
 			subscriptionsGame.add(subscription);
 		}
 		refrescarTabla();
-	}
+	}**/
 	
 	private void rellenarTablaConClientes( List<SubscriptionGamePOJO> subscriptionsGame ) {
 		this.subscriptionsGame.clear();
@@ -372,7 +373,7 @@ public class ManageSubscriptionGameGUI extends JFrame {
 	private void botonNewClient()
 	{
 		estadoInicialFields();
-		
+		mostrarBotoneraGuardarYCancelar();
 	}
 	private void botonEditar(){
 		int row = tablaClientes.getSelectedRow();
@@ -453,7 +454,10 @@ public class ManageSubscriptionGameGUI extends JFrame {
 	private void estadoNuevaSusFields()
 	{
 		List<ClientPOJO> clientes = controller.findAll();
-		
+		if ( cajaClientes.getItemCount() > 0 )
+		{
+			cajaClientes.removeAllItems();
+		}
 		for ( ClientPOJO cliente: clientes )
 		{
 			cajaClientes.addItem(cliente);
@@ -489,7 +493,9 @@ public class ManageSubscriptionGameGUI extends JFrame {
 				}
 				else
 				{
-					controller.updateClient(getClientFromCells());
+					ClientPOJO clientToUpdate = getClientFromCells();
+					clientToUpdate.setId(subscriptionsGame.get(tablaClientes.getSelectedRow()).getCliente().getId());
+					controller.updateClient(clientToUpdate);
 				}
 		}
 		else
@@ -507,12 +513,26 @@ public class ManageSubscriptionGameGUI extends JFrame {
 	private ClientPOJO getClientFromCells()
 	{
 		ClientPOJO clientPOJO = new ClientPOJO();
-		clientPOJO.setDni(cajaDNI.getText());
-		clientPOJO.setAddress(cajaAddress.getText());
-		clientPOJO.setName(cajaName.getText());
-		clientPOJO.setPhone(cajaTelephone.getText());
-		clientPOJO.setSurname(cajaSurname.getText());
-		
+		if ( cajaDNI.getText() != null && !cajaDNI.getText().isEmpty())
+		{
+			clientPOJO.setDni(cajaDNI.getText());
+		}
+		if ( cajaAddress.getText() != null && !cajaAddress.getText().isEmpty())
+		{
+			clientPOJO.setAddress(cajaAddress.getText());
+		}
+		if ( cajaName.getText() != null && !cajaName.getText().isEmpty())
+		{
+			clientPOJO.setName(cajaName.getText());
+		}
+		if ( cajaTelephone.getText() != null && !cajaTelephone.getText().isEmpty())
+		{
+			clientPOJO.setPhone(cajaTelephone.getText());
+		}
+		if ( cajaSurname.getText() != null && !cajaSurname.getText().isEmpty())
+		{
+			clientPOJO.setSurname(cajaSurname.getText());
+		}
 		return clientPOJO;
 	}
 	private void botonCerrar(){

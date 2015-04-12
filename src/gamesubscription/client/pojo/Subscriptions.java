@@ -1,5 +1,6 @@
 package gamesubscription.client.pojo;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -13,6 +14,11 @@ public class Subscriptions {
 
 	@XmlElement(name = "subscription")
 	private List<SubscriptionPOJO> subscriptions = null;
+	
+	public Subscriptions ( )
+	{
+		subscriptions = new ArrayList<SubscriptionPOJO>();
+	}
 
 	public List<SubscriptionPOJO> getSubscriptions() {
 		return subscriptions;

@@ -13,7 +13,7 @@ public class SubscriptionGamePOJO {
 
 	private Date fechaSuscripcion;
 	
-	@XmlElement(name = "client")
+	@XmlElement(name = "cliente")
 	private ClientPOJO cliente;
 	
 	private static int POSITION_FECHA_SUS = 5;

@@ -38,6 +38,6 @@ public class ClientJersey {
 	}
 
 	private static URI getBaseURI() {
-		return UriBuilder.fromUri("http://52.16.130.245:8080/es.deusto.gamesubscription.rest/rest").build();
+		return UriBuilder.fromUri("http://localhost:8080/es.deusto.gamesubscription.rest/rest").build();
 	}
 }

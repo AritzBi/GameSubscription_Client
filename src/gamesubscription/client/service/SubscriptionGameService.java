@@ -65,7 +65,7 @@ public class SubscriptionGameService {
 			System.out.println("clients.GET('application/xml').entity: " + r.getEntity(String.class));
 		}
 		
-		if ( susGame != null )
+		if ( susGame != null && susGame.getSubscriptions().size() > 0 )
 		{
 			subscriptionsGame = susGame.getSubscriptions();
 		}

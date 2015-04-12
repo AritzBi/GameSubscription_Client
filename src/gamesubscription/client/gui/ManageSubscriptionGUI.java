@@ -78,7 +78,10 @@ public class ManageSubscriptionGUI extends JFrame
 		this.controller = controller;
 		subscriptions = new ArrayList<SubscriptionPOJO>();
 		initGUI();
-		rellenarTablaDatosPrueba();
+		if ( gamePOJO != null )
+		{
+			rellenarTablaConSubscripciones( controller.findByGameId(gamePOJO.getId()));
+		}
 		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
@@ -86,7 +89,8 @@ public class ManageSubscriptionGUI extends JFrame
 	public void setClientController(ManageSubscriptionGameGUIController clientController) {
 		this.clientController = clientController;
 	}
-
+	
+	/**
 	private void rellenarTablaDatosPrueba() {
 		subscriptions.clear();
 		SubscriptionPOJO subscription = null;
@@ -100,7 +104,7 @@ public class ManageSubscriptionGUI extends JFrame
 			subscriptions.add(subscription);
 		}
 		refrescarTabla();
-	}
+	}***/
 	
 	private void rellenarTablaConSubscripciones( List<SubscriptionPOJO> subscriptions ) {
 		this.subscriptions.clear();
@@ -344,6 +348,7 @@ public class ManageSubscriptionGUI extends JFrame
 		int selectedRow = tablaSubscriptions.getSelectedRow();
 		if ( selectedRow > -1 )
 		{
+			cajaId.setEditable(false);
 			SubscriptionPOJO subscription = subscriptions.get(selectedRow);
 			if ( subscription != null )
 			{
@@ -381,7 +386,7 @@ public class ManageSubscriptionGUI extends JFrame
 		if ( cajaId.isEditable() )
 		{
 			SubscriptionPOJO subscription = getSubscriptionFromCells();
-			if ( controller.insertSubscription(subscription) )
+			if ( controller.insertSubscription( gamePOJO.getId(), subscription) )
 			{
 				rellenarTablaConSubscripciones(controller.findByGameId(gamePOJO.getId() ) );
 			}
@@ -393,17 +398,29 @@ public class ManageSubscriptionGUI extends JFrame
 			{
 				rellenarTablaConSubscripciones(controller.findByGameId(gamePOJO.getId() ));
 			}
+			cajaId.setEditable(true);
 		}
 	}
 	
 	private SubscriptionPOJO getSubscriptionFromCells ()
 	{
 		SubscriptionPOJO subscriptionPOJO = new SubscriptionPOJO();
-		subscriptionPOJO.setPrice(Integer.valueOf(cajaPrice.getText()));
-		subscriptionPOJO.setDescription(cajaDescription.getText());
-		subscriptionPOJO.setId(Long.valueOf(cajaId.getText()));
-		subscriptionPOJO.setName(cajaName.getText());
-		
+		if ( cajaPrice.getText() != null && !cajaPrice.getText().isEmpty())
+		{
+			subscriptionPOJO.setPrice(Double.valueOf(cajaPrice.getText()));
+		}
+		if ( cajaDescription.getText() != null && !cajaDescription.getText().isEmpty())
+		{
+			subscriptionPOJO.setDescription(cajaDescription.getText());
+		}
+		if ( cajaId.getText() != null && !cajaId.getText().isEmpty() )
+		{
+			subscriptionPOJO.setId(Long.valueOf(cajaId.getText()));
+		}
+		if ( cajaName.getText() != null && !cajaName.getText().isEmpty())
+		{
+			subscriptionPOJO.setName(cajaName.getText());
+		}
 		return subscriptionPOJO;
 	}
 	

@@ -389,12 +389,26 @@ public class ManageGameGUI extends JFrame {
 	private GamePOJO getGameFromCells ()
 	{
 		GamePOJO gamePOJO = new GamePOJO();
-		gamePOJO.setAge(Integer.valueOf(cajaAge.getText()));
-		gamePOJO.setDescription(cajaDescription.getText());
-		gamePOJO.setId(Long.valueOf(cajaId.getText()));
-		gamePOJO.setType(cajaType.getText());
-		gamePOJO.setName(cajaName.getText());
-		
+		if ( cajaAge.getText() != null && !cajaAge.getText().isEmpty() )
+		{
+			gamePOJO.setAge(Integer.valueOf(cajaAge.getText()));
+		}
+		if ( cajaDescription.getText() != null && !cajaDescription.getText().isEmpty() )
+		{
+			gamePOJO.setDescription(cajaDescription.getText());
+		}
+		if ( cajaId.getText() != null && !cajaId.getText().isEmpty() )
+		{
+			gamePOJO.setId(Long.valueOf(cajaId.getText()));
+		}
+		if ( cajaType.getText() != null && !cajaType.getText().isEmpty())
+		{
+			gamePOJO.setType(cajaType.getText());
+		}
+		if ( cajaName.getText() != null && !cajaName.getText().isEmpty())
+		{
+			gamePOJO.setName(cajaName.getText());
+		}
 		return gamePOJO;
 	}
 

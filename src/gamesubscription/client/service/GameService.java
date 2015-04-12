@@ -138,7 +138,7 @@ public class GameService {
 		if ( gamePOJO != null )
 		{
 			try{
-				ClientJersey.getInstance().getService().path("games").path(String.valueOf(gamePOJO.getId())).type(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, gamePOJO);
+				ClientJersey.getInstance().getService().path("games").path(String.valueOf(gamePOJO.getId())).type(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_JSON).put(gamePOJO);
 				success = true;
 			}catch(UniformInterfaceException e){
 				ClientResponse r = e.getResponse();

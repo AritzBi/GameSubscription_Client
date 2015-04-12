@@ -2,6 +2,7 @@ package gamesubscription.client.pojo;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "client")
@@ -13,6 +14,7 @@ public class ClientPOJO {
 	private String name;
 	private String surname;
 	private String address;
+	@XmlElement(name="tel_number")
 	private String phone;
 	
 	private static int POSITION_DNI = 0;

@@ -33,13 +33,49 @@ public class SubscriptionService {
 				System.out.println("subscriptions.GET('application/xml').status: " + r.getStatus());
 				System.out.println("subscriptions.GET('application/xml').entity: " + r.getEntity(String.class));
 			}
-			if ( subs != null )
+			if ( subs != null && subs.getSubscriptions().size() > 0 )
 			{
 				subscriptions = subs.getSubscriptions();
 			}
 		}
 		
 		return subscriptions;
+	}
+	
+	public boolean insertSubscription ( long idGame, SubscriptionPOJO subscription )
+	{
+		boolean success = false;
+		ClientResponse response = ClientJersey.getInstance().getService().path("games").path(String.valueOf(idGame)).path("subscriptions").type(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_JSON).post(ClientResponse.class, subscription);
+		if ( response != null && response.getStatus() == 201 ) //201 --> Created resource
+		{
+			success = true;
+		}
+		else //Si no es codigo 201...
+		{
+			if ( response != null )
+			{
+				System.out.println("subscriptions.{" + subscription.getDescription() + "}.INSERT.status: " + response.getStatus());
+				System.out.println("subscriptions.{" + subscription.getDescription() + "}.INSERT.entity: " + response.getEntity(String.class));
+			}
+		}
+		return success;
+	}
+	
+	public boolean modifySubscription ( SubscriptionPOJO subscription )
+	{
+		boolean success = false;
+	
+		ClientResponse response = ClientJersey.getInstance().getService().path("subscriptions").path(String.valueOf(subscription.getId())).type(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_JSON).put(ClientResponse.class, subscription);
+		if ( response.getStatus() == 204 )
+		{
+			success = true;
+		}
+		else
+		{
+			System.out.println("subscriptions.{" + subscription.getId() + "}.UPDATE.status: " + response.getStatus());
+			System.out.println("subscriptions.{" + subscription.getId() + "}.UPDATE.entity: " + response.getEntity(String.class));
+		}
+		return success;
 	}
 	
 	public boolean deleteSubscription ( long id )

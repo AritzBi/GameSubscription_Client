@@ -24,15 +24,13 @@ public class ManageSubscriptionGUIController {
 		return service.deleteSubscription(id);
 	}
 	
-	//TODO: utilizamos put?
-	public boolean insertSubscription ( SubscriptionPOJO subscription )
+	public boolean insertSubscription ( long idGame, SubscriptionPOJO subscription )
 	{
-		return true;
+		return service.insertSubscription(idGame, subscription);
 	}
 	
-	//TODO: utilizamos post?
 	public boolean updateSubscription ( SubscriptionPOJO subscription )
 	{
-		return true;
+		return service.modifySubscription(subscription);
 	}
 }
