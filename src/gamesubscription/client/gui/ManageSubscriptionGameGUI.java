@@ -8,7 +8,9 @@ import gamesubscription.client.pojo.SubscriptionPOJO;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -458,9 +460,11 @@ public class ManageSubscriptionGameGUI extends JFrame {
 		{
 			cajaClientes.removeAllItems();
 		}
+		Set<String> dnisClientesConSuscripcion = getDNIClientesConSusbscripcion();
 		for ( ClientPOJO cliente: clientes )
 		{
-			cajaClientes.addItem(cliente);
+			if ( !dnisClientesConSuscripcion.contains(cliente.getDni()) )
+				cajaClientes.addItem(cliente);
 		}
 		
 		cajaClientes.setVisible(true);
@@ -470,6 +474,19 @@ public class ManageSubscriptionGameGUI extends JFrame {
 		cajaName.setEnabled(false);
 		cajaSurname.setEnabled(false);
 		cajaTelephone.setEnabled(false);
+	}
+	
+	private Set<String> getDNIClientesConSusbscripcion()
+	{
+		Set<String> dnis = new HashSet<String>();
+		for ( SubscriptionGamePOJO sus : subscriptionsGame)
+		{
+			if ( sus.getCliente() != null)
+			{
+				dnis.add ( sus.getCliente().getDni() );
+			}
+		}
+		return dnis;
 	}
 	
 	private void mostrarBotoneraGuardarYCancelar()
