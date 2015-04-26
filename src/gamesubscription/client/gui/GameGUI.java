@@ -2,6 +2,7 @@ package gamesubscription.client.gui;
 
 import gamesubscription.client.controller.GameController;
 import gamesubscription.client.pojo.GamePOJO;
+import gamesubscription.client.service.GameService;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -174,9 +176,11 @@ public class GameGUI extends JFrame implements Observer {
 	private void botonEnviar() {
 
 		if (volcadoDeTabla()) {
-			JOptionPane.showMessageDialog(this, "Data loaded succesfully.", "Info", JOptionPane.INFORMATION_MESSAGE );
+			JOptionPane.showMessageDialog(this, "Data loaded succesfully.",
+					"Info", JOptionPane.INFORMATION_MESSAGE);
 		} else {
-			JOptionPane.showMessageDialog(this, "Failed loading data...", "Alert", JOptionPane.WARNING_MESSAGE );
+			JOptionPane.showMessageDialog(this, "Failed loading data...",
+					"Alert", JOptionPane.WARNING_MESSAGE);
 		}
 		refrescarTabla();
 	}
@@ -195,5 +199,18 @@ public class GameGUI extends JFrame implements Observer {
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
+	}
+
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				GameService gameService = new GameService();
+				GameController gameController = new GameController(gameService);
+				GameGUI gameGUI = new GameGUI(gameController);
+
+				gameGUI.setLocationRelativeTo(null);
+				gameGUI.setVisible(true);
+			}
+		});
 	}
 }
