@@ -512,7 +512,10 @@ public class ManageSubscriptionGameGUI extends JFrame {
 				{
 					ClientPOJO clientToUpdate = getClientFromCells();
 					clientToUpdate.setId(subscriptionsGame.get(tablaClientes.getSelectedRow()).getCliente().getId());
-					controller.updateClient(clientToUpdate);
+					if ( controller.updateClient(clientToUpdate) )
+					{
+						rellenarTablaConClientes( controller.findBySubscriptionId(subscriptionPOJO.getId()) );
+					}
 				}
 		}
 		else
